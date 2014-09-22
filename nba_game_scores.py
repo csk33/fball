@@ -2,6 +2,9 @@
 # this will pull game scores from espn
 # these will be used to pull player box stats later
 # christopher kim
+#
+# steps: 
+# must have files games, games_old, and games_new initialized before kicking off these scripts
 
 import numpy as np
 import pandas as pd
@@ -10,7 +13,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, date
 
 path='C:\\Users\\Chris\\Desktop\\Fantasy\\Python\\'
-year = 2013
+year = 2014
 teams = pd.read_csv(path+'teams.csv')
 BASE_URL = 'http://espn.go.com/nba/team/schedule/_/name/{0}/year/{1}/seasontype/2/{2}'
 
