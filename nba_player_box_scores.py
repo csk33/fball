@@ -8,8 +8,9 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, date
 
-year=2013
-games = pd.read_csv('C:\\Users\\Chris\\Desktop\\games_'+str(year)+'_new.csv').set_index('id')
+path = 'C:\\Users\\Chris\\Desktop\\Fantasy\\Python\\'
+year=2014
+games = pd.read_csv(path+'games_'+str(year)+'_new.csv').set_index('id')
 BASE_URL = 'http://espn.go.com/nba/boxscore?gameId={0}'
 
 request = requests.get(BASE_URL.format(games.index[0]))
@@ -66,42 +67,29 @@ for index, row in games.iterrows():
 
 players2 = players.set_index('id')
 
-#split out FG, FT, and 3P
-FGM = players2['FGM-A'].str.split('-').str[0]
-for i in range(0,len(FGM)):
-    FGM[i] = int(FGM[i])
+#create dataset with what we have pulled thus far
+players2.to_csv(path+'player_box_not_final_'+str(year)+'.csv')
 
+#read datasets again
+players2 = pd.read_csv(path+'player_box_not_final_'+str(year)+'.csv').set_index('id')
+
+#split out FG, FT, and 3P
+FGM = players2['FGM-A'].str.split('-').str[0].astype(int)
 players2['FGM'] = pd.Series(FGM, index=players2.index)
 
-FGA = players2['FGM-A'].str.split('-').str[1]
-for i in range(0,len(FGA)):
-    FGA[i] = int(FGA[i])
-
+FGA = players2['FGM-A'].str.split('-').str[1].astype(int)
 players2['FGA'] = pd.Series(FGA, index=players2.index)
-#players2['FGA'] = pd.Series(players2['FGM-A'].str.split('-').str[1], index=players2.index)
 
-FTM = players2['FTM-A'].str.split('-').str[0]
-for i in range(0,len(FTM)):
-    FTM[i] = int(FTM[i])
-
+FTM = players2['FTM-A'].str.split('-').str[0].astype(int)
 players2['FTM'] = pd.Series(FTM, index=players2.index)
 
-FTA = players2['FTM-A'].str.split('-').str[1]
-for i in range(0,len(FTA)):
-    FTA[i] = int(FTA[i])
-
+FTA = players2['FTM-A'].str.split('-').str[1].astype(int)
 players2['FTA'] = pd.Series(FTA, index=players2.index)
 
-TPM = players2['3PM-A'].str.split('-').str[0]
-for i in range(0,len(TPM)):
-    TPM[i] = int(TPM[i])
-
+TPM = players2['3PM-A'].str.split('-').str[0].astype(int)
 players2['3PM'] = pd.Series(TPM, index=players2.index)
 
-TPA = players2['3PM-A'].str.split('-').str[1]
-for i in range(0,len(FGA)):
-    TPM[i] = int(TPA[i])
-
+TPA = players2['3PM-A'].str.split('-').str[1].astype(int)
 players2['3PA'] = pd.Series(TPA, index=players2.index)
 
 
@@ -111,11 +99,11 @@ for i in columns:
     if i in ('MIN', 'OREB', 'DREB', 'REB', 'AST', 'STL', 'BLK', 'TO', 'PF', '+/-', 'PTS', 'FGM', 'FGA', 'FTM', 'FTA', '3PM', '3PA'):
         players2[i] = players2[i].convert_objects(convert_numeric=True)
 
-#players2.to_csv('C:\\Users\\Chris\\Desktop\\player_box_'+str(year)+'.csv')
+#players2.to_csv(path+'player_box_'+str(year)+'.csv')
 # to append
-players2.to_csv('C:\\Users\\Chris\\Desktop\\player_box_'+str(year)+'.csv', mode='a', header=False)
+players2.to_csv(path+'player_box_'+str(year)+'.csv', mode='a', header=False)
 
 #set the latest list of games for which we've pulled data as the 'old' games file to compare to next time
-games_all = pd.read_csv('C:\\Users\\Chris\\Desktop\\games_'+str(year)+'.csv').set_index('id')
-games_all.to_csv('C:\\Users\\Chris\\Desktop\\games_'+str(year)+'_old.csv')
+games_all = pd.read_csv(path+'games_'+str(year)+'.csv').set_index('id')
+games_all.to_csv(path+'games_'+str(year)+'_old.csv')
 
