@@ -92,6 +92,7 @@ players2['3PM'] = pd.Series(TPM, index=players2.index)
 TPA = players2['3PM-A'].str.split('-').str[1].astype(int)
 players2['3PA'] = pd.Series(TPA, index=players2.index)
 
+#add FT and FG values
 
 #fix the dataframe types to take stats
 columns=players2.columns
